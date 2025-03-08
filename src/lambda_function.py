@@ -14,10 +14,11 @@ USER_ID = os.getenv("USER_ID")
 def lambda_handler(event, context):
     today = datetime.date.today().isoformat()
     contributions = get_today_contributions(USERNAME, GITHUB_TOKEN, today)
+    print(contributions)
 
-    if contributions == 0:
-        message = "no contribution today！"
-        send_message(CHANNEL_ACCESS_TOKEN, USER_ID, message)
+    # if contributions == 0:
+    message = "no contribution today！"
+    send_message(CHANNEL_ACCESS_TOKEN, USER_ID, message)
 
     return {
         "statusCode": 200,

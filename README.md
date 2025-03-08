@@ -1,4 +1,5 @@
 # contribution-notifier
 ```commandline
-pip install -r requirements.txt -t package/
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
