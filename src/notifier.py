@@ -1,17 +1,33 @@
 import requests
+import json
+import os
 
 
-def send_notification(line_token, message):
-    if not line_token:
-        raise ValueError("LINE Notify token is not provided.")
+def send_message(line_channel_token, user_id, message):
+    """
+    LINE公式アカウントを使ってメッセージを送信する
 
-    url = "https://notify-api.line.me/api/notify"
-    headers = {"Authorization": f"Bearer {line_token}"}
-    payload = {"message": message}
+    :param line_channel_token: LINE Messaging APIのチャネルアクセストークン
+    :param user_id: 送信先のLINEユーザーID
+    :param message: 送信するメッセージ
+    """
+    if not line_channel_token or not user_id:
+        raise ValueError("LINE Channel Token and User ID must be provided.")
 
-    response = requests.post(url, headers=headers, data=payload)
+    url = "https://api.line.me/v2/bot/message/push"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {line_channel_token}"
+    }
+
+    payload = {
+        "to": user_id,
+        "messages": [{"type": "text", "text": message}]
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
 
     if response.status_code != 200:
-        raise Exception(f"Notification failed: {response.text}")
+        raise Exception(f"LINE API Error: {response.text}")
 
     return response.status_code
